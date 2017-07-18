@@ -11,7 +11,7 @@ public class HttpUtil {
 		try{
 			System.out.println("http포워드:"+path);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(path);
-			System.out.println("오류:"+response);
+			System.out.println("response:"+response);
 			dispatcher.forward(request, response);
 		
 		}catch(Exception ex){

@@ -1,12 +1,12 @@
 <%@ page contentType="text/html; charset=euc-kr" %>
-
-<%
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--<%
 	boolean result=false;
 	if(request.getAttribute("result") != null){
 		result=((Boolean)request.getAttribute("result")).booleanValue();
 	}
 	String userId=(String)request.getAttribute("userId");
-%>
+--%>
 
 <html>
 <head>
@@ -35,7 +35,7 @@ function fncCheckDuplication() {
 
 function fncUseId() {
 	if(opener) {
-		opener.document.detailForm.userId.value = "<%=userId%>";
+		opener.document.detailForm.userId.value = "${userId}";
 	}
 	window.close();
 }
@@ -78,7 +78,8 @@ function fncUseId() {
 						<img src="/images/ct_bot_ttl01.gif" width="4" height="7">
 					</td>
 					<td class="ct_ttl02">
-					<%	if(request.getAttribute("result") != null){ %>
+					
+			<%--<%	if(request.getAttribute("result") != null){ 
 								<%=userId %>
 					<%		if(result){	 %>
 									는 사용 가능합니다.
@@ -86,7 +87,13 @@ function fncUseId() {
 									는 사용이 불가능합니다.
 					<%		}
 							}
-					%>
+					%>--%>
+					
+					<c:if test="${ ! empty result }">
+					${userId }는 사용
+					${ result ? "" : "불" }가능 합니다.
+					</c:if>
+										
 					</td>
 				</tr>
 			</table>
@@ -113,13 +120,17 @@ function fncUseId() {
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="105">
-					<%	if(result) { %>
+		<%--	<%	if(result) { %>
 						<input 	type="text" name="userId" id="userId" value="<%=userId %>" class="ct_input_g" 
 										style="width:100px; height:19px"  maxLength="20" >
 					<%	}else {%>			
 						<input 	type="text" name="userId" id="userId" class="ct_input_g" 
 										style="width:100px; height:19px"  maxLength="20" >
-					<%	} %>		
+					<%	} %>		--%>
+					<input type="text" name="userId" id="userId"
+								value="${ ! empty result && result ? userId :  '' } "
+								class="ct_input_g" style="width:100px; height:19px"  maxLength="20" >
+						
 					</td>
 					<td>
 						<table border="0" cellspacing="0" cellpadding="0">
@@ -153,7 +164,8 @@ function fncUseId() {
 		<td align="center">
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
-				<%	if(result){ %>			
+			<%-- 	<%	if(result){ %> --%>
+				<c:if test="${ ! empty result && result }">			
 					<td width="17" height="23">
 						<img src="/images/ct_btnbg01.gif" width="17" height="23" />
 					</td>
@@ -163,7 +175,8 @@ function fncUseId() {
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23" />
 					</td>
-				<%	} %>				
+				</c:if>			
+		<%-- <% }  %> --%>
 					<td width="30"></td>					
 					<td width="17" height="23">
 						<img src="/images/ct_btnbg01.gif" width="17" height="23" />

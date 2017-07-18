@@ -34,6 +34,7 @@
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
 <script type="text/javascript">
+
 function fncGetProductList(currentPage){
 	document.getElementById("currentPage").value = currentPage;
    	document.detailForm.submit();		
@@ -48,7 +49,7 @@ function fncGetProductList(currentPage){
 
 
 <c:choose>
-	<c:when test	="${menu=='manage' }" >
+	<c:when test	="${param.menu=='manage' }" >
 					
 				<form name="detailForm" action="/listProduct.do?menu=manage" method="post">
 				
@@ -71,7 +72,7 @@ function fncGetProductList(currentPage){
 				</table>
 	</c:when>
 	
-	<c:when test	="${menu=='search' }" >
+	<c:when test	="${param.menu=='search' }" >
 			<form name="detailForm" action="/listProduct.do?menu=search" method="post">
 			
 			<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
@@ -179,16 +180,16 @@ function fncGetProductList(currentPage){
 </table>--%>
 
 	<c:set var="i" value="0" />
-	<c:forEach var="porduct" items="${list}">
+	<c:forEach var="product" items="${list}">
 		<c:set var="i" value="${ i+1 }" />
 		<tr class="ct_list_pop">
 			<td align="center">${ i }</td>
 			<td></td>
-			<td align="left"><a href="/getProduct.do?prodNo=${product.ProdNo}&menu=${menu }">${product.ProdName}</a></td>
+			<td align="left"><a href="/getProduct.do?prodNo=${product.prodNo}&menu=${param.menu }">${product.prodName}</a></td>
 			<td></td>
-			<td align="left">${ product.Price }</td>
+			<td align="left">${ product.price }</td>
 			<td></td>
-			<td align="left">${product.RegDate}
+			<td align="left">${product.regDate}
 			</td>		
 		</tr>
 		<tr>
@@ -196,6 +197,11 @@ function fncGetProductList(currentPage){
 		</tr>
 	</c:forEach>
 </table>
+
+
+
+
+
 
 
 <%-- 
