@@ -29,13 +29,15 @@
    
 <html>
 <head>
-<title>상품 목록조회</title>
+<!-- <title>상품 목록조회</title> -->
+
+<title>${menu eq "search" ? "상품 목록조회" : "상품 관리"}</title>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
 <script type="text/javascript">
-
-function fncGetProductList(currentPage){
+//검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScript 이용
+function fncGetList(currentPage){
 	document.getElementById("currentPage").value = currentPage;
    	document.detailForm.submit();		
 }
@@ -43,12 +45,7 @@ function fncGetProductList(currentPage){
 </script>
 </head>
 
-<body bgcolor="#ffffff" text="#000000">
-
-<div style="width:98%; margin-left:10px;">
-
-
-<c:choose>
+<%-- <c:choose>
 	<c:when test	="${param.menu=='manage' }" >
 					
 				<form name="detailForm" action="/listProduct.do?menu=manage" method="post">
@@ -71,9 +68,13 @@ function fncGetProductList(currentPage){
 					</tr>
 				</table>
 	</c:when>
-	
-	<c:when test	="${param.menu=='search' }" >
-			<form name="detailForm" action="/listProduct.do?menu=search" method="post">
+ --%>	
+<%-- 	<c:when test	="${param.menu=='search' }" > --%>
+
+		<body bgcolor="#ffffff" text="#000000">
+		<div style="width:98%; margin-left:10px;">
+			
+			<form name="detailForm" action="/listProduct.do?menu=${menu }" method="post">
 			
 			<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 				<tr>
@@ -83,8 +84,13 @@ function fncGetProductList(currentPage){
 					<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left:10px;">
 						<table width="100%" border="0" cellspacing="0" cellpadding="0">
 							<tr>
-								<td width="93%" class="ct_ttl01">상품 목록조회	</td>
-							</tr>
+<!-- 								<td width="93%" class="ct_ttl01">상품 목록조회	</td> -->
+									<td width="93%" class="ct_ttl01">
+									
+										${menu eq "search" ? "상품 목록조회" : "상품관리" }	
+									
+									</td>
+								</tr>
 						</table>
 					</td>
 					<td width="12" height="37">
@@ -92,15 +98,19 @@ function fncGetProductList(currentPage){
 					</td>
 				</tr>
 			</table>
-		</c:when>		
-</c:choose>
 			
+<%-- 		</c:when>		
+</c:choose>
+ --%>			
+ 
 	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
 		<td align="right">
 			<select name="searchCondition" class="ct_input_g" style="width:80px">
-				<option value="0" ${ ! empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>상품명</option>
-				<option value="1" ${ ! empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>상품가격</option>
+				<option value="0" ${ ! empty search.searchCondition && search.searchCondition eq 0 ? "selected" : "" }>상품명</option>
+				<option value="1" ${ ! empty search.searchCondition && search.searchCondition eq 1 ? "selected" : "" }>상품번호</option>
+				<option value="2" ${ ! empty search.searchCondition && search.searchCondition eq 2 ? "selected" : "" }>상품가격</option>
+			
 			</select>
 			<input type="text" name="searchKeyword" 
 						value="${! empty search.searchKeyword ? search.searchKeyword : ""}"  
@@ -185,14 +195,38 @@ function fncGetProductList(currentPage){
 		<tr class="ct_list_pop">
 			<td align="center">${ i }</td>
 			<td></td>
-			<td align="left"><a href="/getProduct.do?prodNo=${product.prodNo}&menu=${param.menu }">${product.prodName}</a></td>
+			<td align="left">
+	
+				<a href="/getProduct.do?prodNo=${product.prodNo}&menu=${menu }">${product.prodName}</a></td>
+				
 			<td></td>
 			<td align="left">${ product.price }</td>
 			<td></td>
-			<td align="left">${product.regDate}
-			</td>		
-		</tr>
-		<tr>
+			<td align="left">${product.regDate}</td>
+			<td></td>		
+			<td align="left">
+				<c:if test="${!empty menu && menu eq 'search' }">
+				${product.proTranCode ne '' ? "재고없음" : "판매중" }
+				</c:if>
+				<c:if test="${!empty menu && menu eq 'manage' }">
+					<c:choose>
+						<c:when test="${product.proTranCode eq 1 }">
+							구매완료 / <a href="/updateTranCodeByProd.do?prodNo=${product.prodNo}&tranCode=2">배송하기</a>
+						</c:when>
+						<c:when test="${product.proTranCode eq 2 }">
+							배송중
+						</c:when>
+						<c:when test="${product.proTranCode eq 3 }">
+							배송완료
+						</c:when>
+						<c:otherwise>
+						 	판매중
+					 	</c:otherwise>
+					</c:choose>
+				</c:if>
+		</td>
+	</tr>
+	<tr>
 		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
 		</tr>
 	</c:forEach>
