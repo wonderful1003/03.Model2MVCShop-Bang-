@@ -14,6 +14,9 @@ public class UpdateTranCodeAction extends Action {
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
+		
+		
+		
 		return null;
 	}
 

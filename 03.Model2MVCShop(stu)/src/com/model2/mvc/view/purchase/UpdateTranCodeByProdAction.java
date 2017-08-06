@@ -8,9 +8,9 @@ import com.model2.mvc.service.domain.Purchase;
 import com.model2.mvc.service.purchase.PurchaseService;
 import com.model2.mvc.service.purchase.impl.PurchaseServiceImpl;
 
-public class UpdatePurchaseViewAction extends Action {
+public class UpdateTranCodeByProdAction extends Action {
 
-	public UpdatePurchaseViewAction() {
+	public UpdateTranCodeByProdAction() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -18,13 +18,12 @@ public class UpdatePurchaseViewAction extends Action {
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		
-		Purchase purchase = new Purchase();
-		
 		PurchaseService service = new PurchaseServiceImpl();
-		purchase = service.getPurchase(Integer.parseInt(request.getParameter("tranNo")));
-		request.setAttribute("purchase", purchase);		
+		Purchase purchase = service.getPurchaseByProd(Integer.parseInt(request.getParameter("prodNo")));
 		
-		return "forward:/purchase/updatePurchaseView.jsp";
+		
+		
+		return null;
 	}
 
 }

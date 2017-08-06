@@ -37,9 +37,9 @@ public class PurchaseServiceImpl implements PurchaseService{
 	}
 
 	@Override
-	public Purchase updatePurchase(Purchase purchase) throws Exception {
+	public void updatePurchase(Purchase purchase) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+	
 	}
 
 	@Override
