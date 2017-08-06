@@ -9,11 +9,13 @@ public interface PurchaseService {
 	
 	public  Purchase getPurchase(int tranNo) throws Exception; 
 	
+	public  Purchase getPurchaseByProd(int prodNo) throws Exception; 
+	
 	public  HashMap<String, Object> getPurchaseList(Search search, String buyerId) throws Exception;
 	
 	public  HashMap<String, Object> getSaleList(Search search) throws Exception; 
 	
-	public Purchase addPurchase(Purchase purchase) throws Exception; 
+	public void addPurchase(Purchase purchase) throws Exception; 
 	
 	public  void updatePurchase(Purchase purchase)  throws Exception; 
 	

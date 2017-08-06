@@ -20,10 +20,10 @@ public class UpdateTranCodeByProdAction extends Action {
 		
 		PurchaseService service = new PurchaseServiceImpl();
 		Purchase purchase = service.getPurchaseByProd(Integer.parseInt(request.getParameter("prodNo")));
+		purchase.setTranCode(request.getParameter("tranCode"));
+		service.updateTranCode(purchase);
 		
-		
-		
-		return null;
+		return "forward:/listProduct.do?menu=manage";
 	}
 
 }
