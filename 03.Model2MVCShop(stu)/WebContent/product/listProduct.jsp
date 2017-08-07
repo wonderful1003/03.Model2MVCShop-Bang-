@@ -158,37 +158,6 @@ function fncGetList(currentPage){
 	</tr>
 
 
-<%-- 	<% 	
-
-		for(int i=0; i<list.size(); i++) {	
-		Product product = list.get(i);
-	%>	
-	<tr class="ct_list_pop">
-		<td align="center"><%=i+1%></td>
-		<td></td>
-				<td align="left">
-		
-					<a href="/getProduct.do?prodNo=${product.getProdNo()}&menu=${menu }">${product.getProdName()}</a>
-				
-				
-		</td>
-		<td></td>
-		<td align="left">${ product.getPrice() }</td>
-		<td></td>
-		<td align="left">${product.getRegDate()}</td>
-		<td></td>
-		<td align="left">
-		
-			재고 없음
-		
-		</td>	
-	</tr>
-	<tr>
-		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
-	</tr>	
-	<% } %>
-</table>--%>
-
 	<c:set var="i" value="0" />
 	<c:forEach var="product" items="${list}">
 		<c:set var="i" value="${ i+1 }" />

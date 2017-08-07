@@ -67,8 +67,8 @@ public class PurchaseDAO {
 		Connection conn = DBUtil.getConnection();
 		
 		String sql = "SELECT ts.tran_no, ts.buyer_id, ts.receiver_name, ts.receiver_phone, ts.tran_status_code"
-						+"FROM transaction ts"
-						+"WHERE ts.buyer_id="+buyerId+"";
+						+" FROM transaction ts"
+						+" WHERE ts.buyer_id='"+buyerId+"'";
 		
 		sql += "ORDER BY ts.prod_no";
 		
@@ -79,7 +79,7 @@ public class PurchaseDAO {
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		
-		ArrayList<Purchase> purchaselist = new ArrayList<>();
+		ArrayList<Purchase> purchaselist = new ArrayList<Purchase>();
 		
 		for(int i = 0 ; i < search.getPageUnit() ; i++ ){
 			while(rs.next()){
@@ -123,7 +123,7 @@ public class PurchaseDAO {
 		pstmt.setString(5, purchase.getReceiverPhone());
 		pstmt.setString(6, purchase.getDivyAddr());
 		pstmt.setString(7, purchase.getDivyRequest());
-		pstmt.setInt(8, Integer.parseInt(purchase.getTranCode()));
+		pstmt.setInt(8, Integer.parseInt(purchase.getPaymentOption()));
 		pstmt.setString(9, purchase.getDivyDate());
 		
 		pstmt.executeQuery();
@@ -139,10 +139,10 @@ public class PurchaseDAO {
 		Connection conn = DBUtil.getConnection();
 		
 		String sql = "UPDATE transaction SET payment_option=?, "
-							+"receiver_name=?, receiver_phone=?, demailaddr=?"
-							+"divy_request=?, divy_date=?"
-							+ "WHERE tran_no=(SELECT tran_no "
-							+ "WHERE tran_no=? ";
+							+" receiver_name=?, receiver_phone=?, demailaddr=?"
+							+" divy_request=?, divy_date=?"
+							+ " WHERE tran_no=(SELECT tran_no "
+							+ " WHERE tran_no=? ";
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		
@@ -164,10 +164,10 @@ public class PurchaseDAO {
 		
 		Connection conn = DBUtil.getConnection();
 		
-		String sql = "UPDATE transaction "+"SET tran_status_code = ? "
-						+ "WHERE tran_no=(SELECT tran_no"
-														+ "FROM product p, transaction t"
-														+ "WHERE p.prod_no = t.prod_no AND p.prod_no=?)";
+		String sql = " UPDATE transaction "+"SET tran_status_code = ? "
+						+ " WHERE tran_no=(SELECT tran_no"
+														+ " FROM product p, transaction t"
+														+ " WHERE p.prod_no = t.prod_no AND p.prod_no=?)";
 
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		
@@ -182,8 +182,8 @@ public class PurchaseDAO {
 	
 	private int getTotalCount(String sql) throws Exception {
 			
-		sql = "SELECT COUNT(*) "+
-		          "FROM ( " +sql+ ") countTable";
+		sql = " SELECT COUNT(*) "+
+		          " FROM ( " +sql+ ") countTable";
 		
 		Connection con = DBUtil.getConnection();
 		PreparedStatement pStmt = con.prepareStatement(sql);
@@ -203,11 +203,11 @@ public class PurchaseDAO {
 		
 	private String makeCurrentPageSql(String sql , Search search){
 			
-		sql = 	"SELECT * "+ 
-						"FROM (		SELECT inner_table. * ,  ROWNUM AS row_seq " +
+		sql = 	" SELECT * "+ 
+						" FROM (		SELECT inner_table. * ,  ROWNUM AS row_seq " +
 										" 	FROM (	"+sql+" ) inner_table "+
 										"	WHERE ROWNUM <="+search.getCurrentPage()*search.getPageUnit()+" ) " +
-						"WHERE row_seq BETWEEN "+((search.getCurrentPage()-1)*search.getPageUnit()+1) +" AND "+search.getCurrentPage()*search.getPageUnit();
+						" WHERE row_seq BETWEEN "+((search.getCurrentPage()-1)*search.getPageUnit()+1) +" AND "+search.getCurrentPage()*search.getPageUnit();
 			
 		System.out.println("ProductDAO :: make SQL :: "+ sql);	
 			
