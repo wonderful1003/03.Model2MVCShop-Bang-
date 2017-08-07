@@ -26,7 +26,7 @@ public class PurchaseDAO {
 	public Purchase findPurchase(int tranNo) throws Exception {
 		Connection conn = DBUtil.getConnection();
 		
-		String sql = "SELECT *FROM transaction WHERE tran_no = ?";
+		String sql = " SELECT *  FROM transaction WHERE tran_no = ?";
 		
 		PreparedStatement pstmt= conn.prepareStatement(sql);
 		
@@ -66,11 +66,11 @@ public class PurchaseDAO {
 		
 		Connection conn = DBUtil.getConnection();
 		
-		String sql = "SELECT ts.tran_no, ts.buyer_id, ts.receiver_name, ts.receiver_phone, ts.tran_status_code"
-						+"FROM transaction ts"
-						+"WHERE ts.buyer_id="+buyerId+"";
+		String sql = " SELECT ts.tran_no, ts.buyer_id, ts.receiver_name, ts.receiver_phone, ts.tran_status_code"
+						+" FROM transaction ts"
+						+" WHERE ts.buyer_id='"+buyerId+"'";
 		
-		sql += "ORDER BY ts.prod_no";
+		sql += " ORDER BY ts.prod_no";
 		
 		int totalCount = this.getTotalCount(sql);
 		sql = makeCurrentPageSql(sql, search);
@@ -79,7 +79,7 @@ public class PurchaseDAO {
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		
-		ArrayList<Purchase> purchaselist = new ArrayList<>();
+		ArrayList<Purchase> purchaselist = new ArrayList<Purchase>();
 		
 		for(int i = 0 ; i < search.getPageUnit() ; i++ ){
 			while(rs.next()){
@@ -91,7 +91,6 @@ public class PurchaseDAO {
 				purchase.setReceiverName(rs.getString("receiver_name"));
 				purchase.setReceiverPhone(rs.getString("receiver_phone"));
 				purchase.setTranCode(rs.getString("tran_status_code").trim());
-				purchase.setTranNo(rs.getInt("tran_no"));
 				purchaselist.add(purchase);
 			}
 		}
@@ -109,7 +108,7 @@ public class PurchaseDAO {
 
 		Connection conn = DBUtil.getConnection();
 		
-		String sql = "INSERT INTO transaction VALUES(seq_transaction_tran_no.nextval,?,?,?,?,?,?,?,?,sysdate,?)";
+		String sql = " INSERT INTO transaction VALUES(seq_transaction_tran_no.nextval,?,?,?,?,?,?,?,?,sysdate,?)";
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		
@@ -123,7 +122,7 @@ public class PurchaseDAO {
 		pstmt.setString(5, purchase.getReceiverPhone());
 		pstmt.setString(6, purchase.getDivyAddr());
 		pstmt.setString(7, purchase.getDivyRequest());
-		pstmt.setInt(8, Integer.parseInt(purchase.getTranCode()));
+		pstmt.setInt(8, Integer.parseInt(purchase.getPaymentOption()));
 		pstmt.setString(9, purchase.getDivyDate());
 		
 		pstmt.executeQuery();
@@ -138,11 +137,11 @@ public class PurchaseDAO {
 		 
 		Connection conn = DBUtil.getConnection();
 		
-		String sql = "UPDATE transaction SET payment_option=?, "
+		String sql = " UPDATE transaction SET payment_option=?, "
 							+"receiver_name=?, receiver_phone=?, demailaddr=?"
 							+"divy_request=?, divy_date=?"
-							+ "WHERE tran_no=(SELECT tran_no "
-							+ "WHERE tran_no=? ";
+							+ " WHERE tran_no=(SELECT tran_no "
+							+ " WHERE tran_no=? ";
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		
@@ -164,10 +163,10 @@ public class PurchaseDAO {
 		
 		Connection conn = DBUtil.getConnection();
 		
-		String sql = "UPDATE transaction "+"SET tran_status_code = ? "
-						+ "WHERE tran_no=(SELECT tran_no"
-														+ "FROM product p, transaction t"
-														+ "WHERE p.prod_no = t.prod_no AND p.prod_no=?)";
+		String sql = " UPDATE transaction "+" SET tran_status_code = ? "
+						+ " WHERE tran_no = (SELECT tran_no"
+														+ " FROM product p, transaction t"
+														+ " WHERE p.prod_no = t.prod_no AND p.prod_no=?)";
 
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		
@@ -182,8 +181,8 @@ public class PurchaseDAO {
 	
 	private int getTotalCount(String sql) throws Exception {
 			
-		sql = "SELECT COUNT(*) "+
-		          "FROM ( " +sql+ ") countTable";
+		sql = " SELECT COUNT(*) "+
+		          " FROM ( " +sql+ ") countTable";
 		
 		Connection con = DBUtil.getConnection();
 		PreparedStatement pStmt = con.prepareStatement(sql);
@@ -203,13 +202,13 @@ public class PurchaseDAO {
 		
 	private String makeCurrentPageSql(String sql , Search search){
 			
-		sql = 	"SELECT * "+ 
-						"FROM (		SELECT inner_table. * ,  ROWNUM AS row_seq " +
+		sql = 	" SELECT * "+ 
+						" FROM (		SELECT inner_table. * ,  ROWNUM AS row_seq " +
 										" 	FROM (	"+sql+" ) inner_table "+
 										"	WHERE ROWNUM <="+search.getCurrentPage()*search.getPageUnit()+" ) " +
-						"WHERE row_seq BETWEEN "+((search.getCurrentPage()-1)*search.getPageUnit()+1) +" AND "+search.getCurrentPage()*search.getPageUnit();
+						" WHERE row_seq BETWEEN "+((search.getCurrentPage()-1)*search.getPageUnit()+1) +" AND "+search.getCurrentPage()*search.getPageUnit();
 			
-		System.out.println("ProductDAO :: make SQL :: "+ sql);	
+		System.out.println(" ProductDAO :: make SQL :: "+ sql);	
 			
 			return sql;
 	}

@@ -205,6 +205,7 @@ function fncGetList(currentPage){
 			<td align="left">${product.regDate}</td>
 			<td></td>		
 			<td align="left">
+
 				<c:if test="${!empty menu && menu eq 'search' }">
 				${product.proTranCode ne '' ? "재고없음" : "판매중" }
 				</c:if>
