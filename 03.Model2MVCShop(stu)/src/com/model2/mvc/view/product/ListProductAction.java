@@ -1,6 +1,5 @@
 package com.model2.mvc.view.product;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;

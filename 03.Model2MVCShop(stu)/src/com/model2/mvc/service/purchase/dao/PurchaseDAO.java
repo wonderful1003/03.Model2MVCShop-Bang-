@@ -3,11 +3,9 @@ package com.model2.mvc.service.purchase.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import javax.servlet.jsp.jstl.sql.Result;
+import java.util.Map;
 
 import com.model2.mvc.common.Search;
 import com.model2.mvc.common.util.DBUtil;
@@ -66,26 +64,35 @@ public class PurchaseDAO {
 		
 		Connection conn = DBUtil.getConnection();
 		
-		String sql = " SELECT ts.tran_no, ts.buyer_id, ts.receiver_name, ts.receiver_phone, ts.tran_status_code"
+		String sql = "SELECT ts.tran_no, ts.buyer_id, ts.receiver_name, ts.receiver_phone, ts.tran_status_code"
 						+" FROM transaction ts"
 						+" WHERE ts.buyer_id='"+buyerId+"'";
 		
 		sql += " ORDER BY ts.prod_no";
 		
+		System.out.println(sql);
 		int totalCount = this.getTotalCount(sql);
 		sql = makeCurrentPageSql(sql, search);
+		System.out.println("여기는 sql"+sql);
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
 		
-		HashMap<String, Object> map = new HashMap<String, Object>();
+		System.out.println(pstmt.toString());
+		System.out.println(rs.toString());
 		
+		HashMap<String, Object> map = new HashMap<String, Object>();
 		ArrayList<Purchase> purchaselist = new ArrayList<Purchase>();
 		
-		for(int i = 0 ; i < search.getPageUnit() ; i++ ){
+		System.out.println("getPurchaseList 의 buyerId : "+buyerId);
+		
+		System.out.println(" Resultset for 문 시작");
+		for(int i = 0 ; i < search.getPageSize() ; i++ ){
+			
+			System.out.println("여기는 pageunit"+search.getPageSize());
+			
 			while(rs.next()){
 				Purchase purchase = new Purchase();
 				User user = new UserServiceImpl().getUser(rs.getString("buyer_id"));
-				
 				purchase.setTranNo(rs.getInt("tran_no"));
 				purchase.setBuyer(user);
 				purchase.setReceiverName(rs.getString("receiver_name"));
@@ -94,9 +101,11 @@ public class PurchaseDAO {
 				purchaselist.add(purchase);
 			}
 		}
-		
+		System.out.println(" Resultset for 문 끝\n");
+
 		map.put("totalCount", new Integer(totalCount));
 		map.put("purchaselist", purchaselist);
+		System.out.println("여기는 맵 :"+map);
 		return map;
 	}
 	
@@ -181,9 +190,10 @@ public class PurchaseDAO {
 	
 	private int getTotalCount(String sql) throws Exception {
 			
-		sql = " SELECT COUNT(*) "+
+		sql = "SELECT COUNT(*) AS a "+
 		          " FROM ( " +sql+ ") countTable";
 		
+		System.out.println("여기는 getTotalCount:"+sql);
 		Connection con = DBUtil.getConnection();
 		PreparedStatement pStmt = con.prepareStatement(sql);
 		ResultSet rs = pStmt.executeQuery();
@@ -192,7 +202,7 @@ public class PurchaseDAO {
 		if( rs.next() ){
 			totalCount = rs.getInt(1);
 		}
-		
+		System.out.println("여기는 getTotalCount"+totalCount);
 		pStmt.close();
 		con.close();
 		rs.close();
@@ -205,8 +215,8 @@ public class PurchaseDAO {
 		sql = 	" SELECT * "+ 
 						" FROM (		SELECT inner_table. * ,  ROWNUM AS row_seq " +
 										" 	FROM (	"+sql+" ) inner_table "+
-										"	WHERE ROWNUM <="+search.getCurrentPage()*search.getPageUnit()+" ) " +
-						" WHERE row_seq BETWEEN "+((search.getCurrentPage()-1)*search.getPageUnit()+1) +" AND "+search.getCurrentPage()*search.getPageUnit();
+										"	WHERE ROWNUM <="+search.getCurrentPage()*search.getPageSize()+" ) " +
+						" WHERE row_seq BETWEEN "+((search.getCurrentPage()-1)*search.getPageSize()+1) +" AND "+search.getCurrentPage()*search.getPageSize();
 			
 		System.out.println(" ProductDAO :: make SQL :: "+ sql);	
 			

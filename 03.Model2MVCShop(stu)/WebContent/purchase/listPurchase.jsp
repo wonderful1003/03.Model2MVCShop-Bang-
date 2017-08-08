@@ -123,8 +123,8 @@
 	
 	
 	<c:set var="i" value="0"/>
-		<c:forEach var="purchase" items="${purchaseList }">
-			<c:set var="i" value="${i+1 }"/>
+		<c:forEach var="purchase" items="${purchaselist}">
+			<c:set var="i" value="${ i+1 }"/>
 			<tr class="ct_list_pop">
 			<td align="center">
 				<c:if test="${purchase.tranCode eq 1 }">

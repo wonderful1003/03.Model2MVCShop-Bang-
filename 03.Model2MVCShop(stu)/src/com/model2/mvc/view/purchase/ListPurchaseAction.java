@@ -1,6 +1,7 @@
 package com.model2.mvc.view.purchase;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,13 +17,13 @@ public class ListPurchaseAction extends Action {
 
 	public ListPurchaseAction() {
 		// TODO Auto-generated constructor stub
-		System.out.println("1여기는 ListPurchaseAction");
+		
 	}
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("2여기는 ListPurchaseAction");
+
 		Search search = new Search();
 				
 		int currentPage=1;
@@ -30,7 +31,7 @@ public class ListPurchaseAction extends Action {
 		if(request.getParameter("currentPage")!=null && !(request.getParameter("currentPage").equals(""))){
 			currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		}
-		System.out.println("3여기는 ListPurchaseAction");
+		
 		search.setCurrentPage(currentPage);
 		search.setSearchCondition(request.getParameter("searchCondition"));
 		search.setSearchKeyword(request.getParameter("searchKeyword"));
@@ -38,20 +39,25 @@ public class ListPurchaseAction extends Action {
 		int pageUnit = Integer.parseInt(request.getServletContext().getInitParameter("pageUnit"));
 		search.setPageSize(pageSize);
 		
-		System.out.println("4여기는 ListPurchaseAction");
+		
 		String buyerId = ((User)(request.getSession(true).getAttribute("user"))).getUserId();
-		System.out.println("5여기는 ListPurchaseAction");
+		
 		PurchaseService service = new PurchaseServiceImpl();
-		System.out.println("6여기는 ListPurchaseAction");
-		HashMap<String, Object> map = service.getPurchaseList(search, buyerId);
-		System.out.println("7여기는 ListPurchaseAction");
+		
+		Map<String, Object> map = service.getPurchaseList(search, buyerId);
+		
+		
 		Page resultPage = 
 				new Page( currentPage, ((Integer)map.get("totalCount")).intValue(), 
 						pageUnit, pageSize);
+		System.out.println("purchaselist : " + map.get("purchaselist"));
 		
+		System.out.println("1여기는 listpurchaseAction의 resultPage: "+resultPage);
 		request.setAttribute("resultPage", resultPage);
-		request.setAttribute("purchaseList", map.get("purchaseList"));
+		request.setAttribute("purchaselist", map.get("purchaselist"));
 		request.setAttribute("search", search);
+		
+		System.out.println("2purchaselist의 맵 : " + map.get("purchaselist"));
 		
 		return "forward:/purchase/listPurchase.jsp";
 	}
